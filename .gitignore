@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs/KimCommander/v16
+/KimCommander/obj/Debug/TempPE
+/KimCommander/obj/Debug
+/KimCommander.sln
+/KimCommander/bin
+/KimCommander/obj/Release

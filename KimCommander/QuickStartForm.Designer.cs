@@ -35,23 +35,26 @@
             this.lb_execute_name = new System.Windows.Forms.Label();
             this.btn_showMain = new System.Windows.Forms.Button();
             this.pictureBox_Execute = new System.Windows.Forms.PictureBox();
+            this.txtInput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Execute)).BeginInit();
             this.SuspendLayout();
             // 
             // comboInput
             // 
+            this.comboInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboInput.FormattingEnabled = true;
-            this.comboInput.Location = new System.Drawing.Point(12, 69);
+            this.comboInput.Location = new System.Drawing.Point(12, 101);
             this.comboInput.Name = "comboInput";
             this.comboInput.Size = new System.Drawing.Size(424, 20);
             this.comboInput.TabIndex = 0;
+            this.comboInput.TabStop = false;
+            this.comboInput.SelectedIndexChanged += new System.EventHandler(this.comboInput_SelectedIndexChanged);
             this.comboInput.SelectionChangeCommitted += new System.EventHandler(this.comboInput_SelectionChangeCommitted);
             this.comboInput.SelectedValueChanged += new System.EventHandler(this.comboInput_SelectedValueChanged);
-            this.comboInput.KeyUp += new System.Windows.Forms.KeyEventHandler(this.comboInput_KeyUp);
             // 
             // btn_Execute
             // 
-            this.btn_Execute.Location = new System.Drawing.Point(442, 69);
+            this.btn_Execute.Location = new System.Drawing.Point(442, 101);
             this.btn_Execute.Name = "btn_Execute";
             this.btn_Execute.Size = new System.Drawing.Size(112, 19);
             this.btn_Execute.TabIndex = 1;
@@ -79,10 +82,10 @@
             // 
             // btn_showMain
             // 
-            this.btn_showMain.Location = new System.Drawing.Point(442, 44);
+            this.btn_showMain.Location = new System.Drawing.Point(442, 74);
             this.btn_showMain.Name = "btn_showMain";
             this.btn_showMain.Size = new System.Drawing.Size(111, 19);
-            this.btn_showMain.TabIndex = 3;
+            this.btn_showMain.TabIndex = 2;
             this.btn_showMain.Text = "메인폼보기";
             this.btn_showMain.UseVisualStyleBackColor = true;
             this.btn_showMain.Click += new System.EventHandler(this.btn_showMain_Click);
@@ -95,12 +98,22 @@
             this.pictureBox_Execute.TabIndex = 4;
             this.pictureBox_Execute.TabStop = false;
             // 
+            // txtInput
+            // 
+            this.txtInput.Location = new System.Drawing.Point(12, 74);
+            this.txtInput.Name = "txtInput";
+            this.txtInput.Size = new System.Drawing.Size(424, 21);
+            this.txtInput.TabIndex = 0;
+            this.txtInput.TextChanged += new System.EventHandler(this.txtInput_TextChanged);
+            this.txtInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtInput_KeyDown);
+            // 
             // QuickStartForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(566, 101);
+            this.ClientSize = new System.Drawing.Size(566, 133);
+            this.Controls.Add(this.txtInput);
             this.Controls.Add(this.pictureBox_Execute);
             this.Controls.Add(this.btn_showMain);
             this.Controls.Add(this.lb_execute_name);
@@ -135,5 +148,6 @@
         private System.Windows.Forms.Label lb_execute_name;
         private System.Windows.Forms.Button btn_showMain;
         private System.Windows.Forms.PictureBox pictureBox_Execute;
+        private System.Windows.Forms.TextBox txtInput;
     }
 }

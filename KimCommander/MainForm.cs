@@ -15,7 +15,7 @@ namespace KimCommander
 {    
     public partial class MainForm : Form
     {
-        private const String homePageLink = "http://kaltok84.tistory.com/category/%EC%B7%A8%EB%AF%B8%EB%A1%9C%ED%95%98%EB%8A%94%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D";
+        private const string homePageLink = "https://github.com/greatm84/KimCommander/wiki";
         KeyboardHook hook = new KeyboardHook();
         QuickStartForm mQuickItemForm;
         private bool allowVisible;     // ContextMenu's Show command used
@@ -28,7 +28,7 @@ namespace KimCommander
         public MainForm()
         {
             InitializeComponent();
-            this.Text = "김커맨더입니다 (" + Utils.getAppVersion() + ") : kaltok84@gmail.com";
+            this.Text = "I'm KimCommander (" + Utils.getAppVersion() + ") : kaltok84@gmail.com";
             notifyIcon.ContextMenuStrip = contextMenuStrip;
 
             this.shutdownCancelMenuItem.Click += shutdownCancleMenuItem_Click;
@@ -132,6 +132,10 @@ namespace KimCommander
             if (mQuickItemForm.Visible == false)
             {
                 mQuickItemForm.Show();
+                mQuickItemForm.WindowState = FormWindowState.Normal;
+                mQuickItemForm.BringToFront();
+                mQuickItemForm.TopMost = true;
+                mQuickItemForm.Activate();
             }
         }
 
@@ -141,7 +145,7 @@ namespace KimCommander
             {
                 this.Hide();
                 e.Cancel = true;
-                notifyIcon.Text = "김커맨더 대기중";
+                refreshNotifyIconText();
             }
             base.OnFormClosing(e);
         }
@@ -174,7 +178,9 @@ namespace KimCommander
 
         private void shutdownCancleMenuItem_Click(object sender, EventArgs e)
         {
-
+            mAutoShutDownItem.alive = false;
+            Utils.sendShutdownOff();
+            refreshNotifyIconText();
         }
 
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
@@ -259,12 +265,12 @@ namespace KimCommander
 
         public void timeCaptureFunction(Object param1, Object param2)
         {
-            Utils.CaptureApplication((String)param1);
+            Utils.CaptureApplication((string)param1);
         }
 
         public void timeLaunchApp(Object param1, Object param2, bool asAdmin)
         {
-            Utils.LaunchApp((String)param1, (String)param2, asAdmin);
+            Utils.LaunchApp((string)param1, (string)param2, asAdmin);
         }
 
         private void btn_ExportData_Click(object sender, EventArgs e)
@@ -291,7 +297,7 @@ namespace KimCommander
                 txt_QArgument.Text, txt_QPreCommand.Text, chk_QRunAdmin.Checked);
         }
 
-        private bool checkExistShortName(String shortName, String skipCheckShortName)
+        private bool checkExistShortName(string shortName, string skipCheckShortName)
         {
             if (shortName.Equals(skipCheckShortName, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -311,20 +317,20 @@ namespace KimCommander
             return false;
         }
 
-        private bool checkExistShortName(String shortName)
+        private bool checkExistShortName(string shortName)
         {            
             return checkExistShortName(shortName,"");
         }
 
-        public String findProperShortName(String shortName)
+        public string findProperShortName(string shortName)
         {
             return findProperShortName(shortName, "");
         }
 
-        private String findProperShortName(String shortName, String skipShortName)
+        private string findProperShortName(string shortName, string skipShortName)
         {
             int i = 0;
-            String newShortName = shortName;
+            string newShortName = shortName;
             while (checkExistShortName(newShortName, skipShortName))
             {
                 i++;
@@ -337,7 +343,7 @@ namespace KimCommander
             return newShortName;
         }
 
-        public void addQuickItemDataToListView(String name, String filePath, String shortName, String argument, String preCommand, bool asAdmin)
+        public void addQuickItemDataToListView(string name, string filePath, string shortName, string argument, string preCommand, bool asAdmin)
         {
             mQuickItems.Add(new QuickStartItem(name, filePath, shortName, argument, preCommand, asAdmin));
             if (Utils.checkIconFileExit(shortName) == false)
@@ -353,25 +359,7 @@ namespace KimCommander
             lvItem.SubItems.Add(asAdmin.ToString());
             listViewQuickItem.Items.Add(lvItem);
             DataManager.saveDatas();
-        }
-
-        public void addTimeItemDataToListView(String name, String filePath, String shortName, String argument, String preCommand, bool asAdmin)
-        {
-            mQuickItems.Add(new QuickStartItem(name, filePath, shortName, argument, preCommand, asAdmin));
-            if (Utils.checkIconFileExit(shortName) == false)
-            {
-                Utils.makeIconCacheFile(Utils.getIconFromAppPath(filePath), shortName);
-            }
-            mQuickItemImageList.Images.Add(Utils.getIconCache(shortName));
-            ListViewItem lvItem = new ListViewItem(name, mQuickItemImageList.Images.Count - 1);
-            lvItem.SubItems.Add(filePath);
-            lvItem.SubItems.Add(shortName);
-            lvItem.SubItems.Add(argument);
-            lvItem.SubItems.Add(preCommand);
-            lvItem.SubItems.Add(asAdmin.ToString());
-            listViewQuickItem.Items.Add(lvItem);
-            DataManager.saveDatas();
-        }
+        }        
 
         private void btn_Del_Click(object sender, EventArgs e)
         {
@@ -423,11 +411,11 @@ namespace KimCommander
             e.Effect = DragDropEffects.Copy;
         }
 
-        private void droppedQuickItem(String[] filePaths)
+        private void droppedQuickItem(string[] filePaths)
         {
             if (filePaths.Length > 0)
             {
-                String filePath = filePaths[0];
+                string filePath = filePaths[0];
                 if (Path.HasExtension(filePath))
                 {
                     // 실행파일이다
@@ -449,11 +437,11 @@ namespace KimCommander
             }
         }
 
-        private void droppedTimeItem(String[] filePaths)
+        private void droppedTimeItem(string[] filePaths)
         {
             if (filePaths.Length > 0)
             {
-                String filePath = filePaths[0];
+                string filePath = filePaths[0];
                 if (Path.HasExtension(filePath))
                 {
                     // 실행파일이다
@@ -487,7 +475,7 @@ namespace KimCommander
 
         private void groupBoxQuickItem_DragDrop(object sender, DragEventArgs e)
         {
-            String[] filePaths = (String[])e.Data.GetData(DataFormats.FileDrop, false);
+            string[] filePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             droppedQuickItem(filePaths);
         }
 
@@ -521,10 +509,10 @@ namespace KimCommander
 
         private void listViewQuickItem_DragDrop(object sender, DragEventArgs e)
         {
-            String[] filePaths = (String[])e.Data.GetData(DataFormats.FileDrop, false);
+            string[] filePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             if (filePaths.Length > 0)
             {
-                String filePath = filePaths[0];
+                string filePath = filePaths[0];
                 if (Path.HasExtension(filePath))
                 {                    
                     addQuickItemDataToListView(Path.GetFileNameWithoutExtension(filePath), filePath,
@@ -634,7 +622,8 @@ namespace KimCommander
 
         private void btnAutoShutdown_Click(object sender, EventArgs e)
         {
-
+            // var shutdownForm = new AutoShutdownForm();
+            // shutdownForm.Showdialog();
         }
 
         private void listViewTimeItem_SelectedIndexChanged(object sender, EventArgs e)
