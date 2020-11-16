@@ -88,6 +88,29 @@ namespace KimCommander
             return result;
         }
 
+        public static int computeCost(string input1, string input2) {
+            if (string.IsNullOrEmpty(input1))
+                return string.IsNullOrEmpty(input2) ? 0 : input2.Length;
+            if (string.IsNullOrEmpty(input2))
+                return string.IsNullOrEmpty(input1) ? 0 : input1.Length;
+
+            int input1Len = input1.Length;
+            int input2Len = input2.Length;
+
+            int[,] distance = new int[input1Len + 1, input2Len + 1];
+
+            for (int i = 0; i <= input1Len; distance[i, 0] = i++) ;
+            for (int j = 0; j <= input2Len; distance[0, j] = j++) ;
+
+            for(int i = 1; i<=input1Len; i++) {
+                for(int j = 1; j<=input2Len; j++) {
+                    int cost = (input2[j-1]==input1[i-1])?0:1;
+                    distance[i, j] = Math.Min(Math.Min(distance[i - 1, j] + 1, distance[i, j - 1] + 1), distance[i - 1, j - 1] + cost);
+                }
+            }
+            return distance[input1Len, input2Len];
+        }
+
         public static void LaunchApp(string fileName, string arguments, bool asAdmin)
         {
             // Use ProcessStartInfo class.

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Linq;
 
 namespace KimCommander {
     public partial class QuickStartForm : Form {
@@ -12,6 +13,7 @@ namespace KimCommander {
         private MainForm mParentForm;
         private List<QuickStartItem> mCurComboboxItems = new List<QuickStartItem>();
         private QuickStartItem mLastSelectedItem = null;
+        private bool mSkipTextInputChangedEvent = false;
 
         private QuickStartForm() {
             InitializeComponent();
@@ -40,13 +42,27 @@ namespace KimCommander {
         private List<QuickStartItem> findDBbyText(string text) {
             List<QuickStartItem> result = new List<QuickStartItem>();
             List<QuickStartItem> items = DataManager.getQuickStartItems();
+            var queryText = Regex.Replace(text, @"[^0-9a-zA-Z]+", "");            
+
             int textLen = text.Length;
-            if (items == null) return result;
-            foreach (QuickStartItem item in items.ToArray()) {
-                if (item.ShortName.Length >= textLen && Regex.IsMatch(item.ShortName, text, RegexOptions.IgnoreCase)) {
+            if (items == null || items.Count == 0) return result;
+            var addedDict = new Dictionary<string, string>();
+            foreach (var item in items.ToArray()) {
+                var shortName = item.ShortName;
+                if (shortName.Length >= textLen && Regex.IsMatch(shortName, text, RegexOptions.IgnoreCase)) {
                     result.Add(item);
+                    addedDict.Add(shortName, shortName);
                 }
             }
+            // add contain list
+            foreach(var item in items.ToArray()) {
+                var shortName = item.ShortName;
+                if (!addedDict.ContainsKey(shortName)) {
+                    if (shortName.Constains(queryText)) {
+                        result.Add(item);
+                    }
+                }
+            }            
             return result;
         }
 
@@ -107,6 +123,7 @@ namespace KimCommander {
 
         private void QuickStartForm_VisibleChanged(object sender, EventArgs e) {
             if (this.Visible) {
+                mSkipTextInputChangedEvent = true;
                 txtInput.Text = "";
                 this.ActiveControl = txtInput;
             }
@@ -150,6 +167,10 @@ namespace KimCommander {
         }
 
         private void txtInput_TextChanged(object sender, EventArgs e) {
+            if (mSkipTextInputChangedEvent) {
+                mSkipTextInputChangedEvent = false;
+                return;
+            }
             refreshComboInputDropList(findDBbyText(txtInput.Text));
         }
 
@@ -191,5 +212,5 @@ namespace KimCommander {
                     break;
             }
         }
-    }
+    }    
 }

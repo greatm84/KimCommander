@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DataManager.cs" />
     <Compile Include="Define.cs" />
+    <Compile Include="Ext\StringExt.cs" />
     <Compile Include="KeyboardHook.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
