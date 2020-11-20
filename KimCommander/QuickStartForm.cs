@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
-using System.Linq;
 
 namespace KimCommander {
     public partial class QuickStartForm : Form {
@@ -42,7 +41,8 @@ namespace KimCommander {
         private List<QuickStartItem> findDBbyText(string text) {
             List<QuickStartItem> result = new List<QuickStartItem>();
             List<QuickStartItem> items = DataManager.getQuickStartItems();
-            var queryText = Regex.Replace(text, @"[^0-9a-zA-Z]+", "");            
+            var reg = new Regex("[*'\",_&#^@]");
+            var queryText = reg.Replace(text, string.Empty);
 
             int textLen = text.Length;
             if (items == null || items.Count == 0) return result;
