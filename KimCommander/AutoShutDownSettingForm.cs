@@ -46,6 +46,7 @@ namespace KimCommander {
                 SendCmd(reserveOffset, true);
 
                 btnReserve.Text = "Cancel Reservation";
+                reserved = true;
             } else {                
                 Init();
             }
@@ -126,7 +127,7 @@ namespace KimCommander {
         }
 
         private void SendCmd(int offsetTime, bool timerOn) {
-            var cmdStrOn = "-s -f -t";
+            var cmdStrOn = "-s -f -t ";
             var cmdStrOff = "-a";
 
             var cmd = new ProcessStartInfo("ShutDown.exe");
