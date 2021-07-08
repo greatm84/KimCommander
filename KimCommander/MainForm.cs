@@ -621,9 +621,9 @@ namespace KimCommander
         }
 
         private void btnAutoShutdown_Click(object sender, EventArgs e)
-        {
-            // var shutdownForm = new AutoShutdownForm();
-            // shutdownForm.Showdialog();
+        {            
+            var shutdownForm = new AutoShutDownSettingForm();
+            shutdownForm.ShowDialog();
         }
 
         private void listViewTimeItem_SelectedIndexChanged(object sender, EventArgs e)
